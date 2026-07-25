@@ -31,8 +31,11 @@ everything unfreezes; clipboard works again.
 - One timeout is ignored (could be a genuine slow transfer of a large item).
   **Two consecutive 25 s timeouts** ⇒ hang confirmed.
 - Recovery escalates gently: `SIGTERM pboard` → re-probe → `SIGKILL pboard`
-  → re-probe → restart `useractivityd` (the Handoff/Continuity broker) as a
-  last resort. launchd respawns both services instantly.
+  if needed. It then always restarts `useractivityd` (the Handoff/Continuity
+  broker) as well: field testing showed its advertising state goes stale
+  against the new pboard instance, which silently breaks Mac → iPhone
+  clipboard sync while inbound sync keeps working. launchd respawns both
+  services instantly.
 - Idle cost is effectively zero: the daemon sleeps 99.9 % of the time, uses a
   few MB of RAM, writes to disk only when an incident actually happens.
 

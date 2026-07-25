@@ -54,11 +54,17 @@ recover() {
         sleep 5
     fi
     if ! "$PROBE" 10; then
-        log "still unresponsive after SIGKILL — restarting useractivityd"
-        /usr/bin/killall useractivityd 2>/dev/null
+        log "still unresponsive after SIGKILL — force-killing pboard again"
         /usr/bin/killall -9 pboard 2>/dev/null
         sleep 5
     fi
+    # Always restart useractivityd after a pboard restart: its outbound
+    # advertising state goes stale against the new pboard instance, which
+    # silently breaks Mac -> iPhone/iPad clipboard sync (inbound keeps
+    # working, making the breakage easy to miss).
+    log "restarting useractivityd to refresh Continuity advertising state"
+    /usr/bin/killall useractivityd 2>/dev/null
+    sleep 3
     if "$PROBE" 10; then
         t1=$(date +%s)
         log "recovered in $((t1 - t0))s after intervention"
