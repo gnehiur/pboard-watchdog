@@ -18,6 +18,39 @@ This bug family has been reported since at least iOS 10 (2016) and still
 exists in current macOS. The community fix is `killall pboard` — but you have
 to know that, and be able to reach a terminal while your GUI is frozen.
 
+## You are not alone: a decade of reports
+
+The same pasteboard code runs on every Apple platform, so the hang bites in
+both directions — Macs freeze fetching from iPhones, iPhones freeze fetching
+from Macs:
+
+- [Universal Clipboard / UIPasteboard hangs on iOS 10 (2016)](https://developer.apple.com/forums/thread/61818) —
+  Apple Developer Forums, the earliest report of this family we could find.
+  A [second thread from the same era](https://developer.apple.com/forums/thread/70661).
+- [Universal Clipboard broken in macOS 13.4 beta (2023)](https://developer.apple.com/forums/thread/727894) —
+  still broken seven macOS versions later.
+- Apple Support Community, the iPhone-side mirror image — a "Pasting from
+  MacBook…" dialog that never finishes, ignores Cancel, and even blocks the
+  power-off screen: [one](https://discussions.apple.com/thread/254874892),
+  [two](https://discussions.apple.com/thread/254457898),
+  [three](https://discussions.apple.com/thread/254633143),
+  [four (2020)](https://discussions.apple.com/thread/250744006),
+  [five](https://discussions.apple.com/thread/254811288).
+- The `killall pboard` remedy is folk knowledge repeated by a cottage
+  industry of troubleshooting guides:
+  [OSXDaily](https://osxdaily.com/2018/02/02/fix-copy-paste-not-working-mac/),
+  [iDownloadBlog](https://www.idownloadblog.com/2022/06/30/how-to-fix-universal-clipboard-not-working-on-iphone-ipad-mac/),
+  [iBoysoft](https://iboysoft.com/tips/universal-clipboard-not-working-on-mac.html),
+  [MacPaw](https://macpaw.com/how-to/copypaste-not-working-mac),
+  [macReports](https://macreports.com/copy-and-paste-from-iphone-or-ipad-to-mac-not-working-how-to-fix/),
+  [WebNots](https://www.webnots.com/how-to-fix-copy-and-paste-not-working-between-iphone-and-mac/),
+  [Beebom](https://beebom.com/fix-universal-clipboard-not-working-iphone-mac/).
+
+Ten years, every Apple platform, no official fix, and the accepted answer is
+"know a magic terminal command and run it while your machine is frozen".
+That is the gap this project fills: it runs the magic command for you,
+automatically, within about a minute.
+
 `pboard-watchdog` automates it: a tiny background daemon that notices the
 hang within ~1 minute and restarts `pboard` for you. You get a notification;
 everything unfreezes; clipboard works again.
